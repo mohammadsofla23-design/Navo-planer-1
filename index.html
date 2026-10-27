@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fbf8f4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NAVO STUDIO">
+<title>NAVO STUDIO | برنامه‌ریزی کارها</title>
+<style>
+:root{--bg:#fbf8f4;--fg:#3a332d;--mut:#8b8178;--soft:#f3ece3;--gold:#b8946a;--red:#bb5555;--grn:#5b8a62}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+header{padding:calc(env(safe-area-inset-top) + 12px) 14px 8px;text-align:center;background:var(--bg);position:sticky;top:0;z-index:2}
+.brand{color:var(--gold);letter-spacing:4px;font-size:12px;margin:4px 0 6px;direction:ltr}.h1{font-size:23px;font-weight:400;margin:0 0 10px}
+.tabs,.chips{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:7px auto}.chip{border:0;border-radius:24px;padding:8px 14px;background:var(--soft);color:var(--fg);font-size:13px}.chip.active{background:var(--fg);color:#fff}
+main{padding:10px 14px calc(110px + env(safe-area-inset-bottom));max-width:700px;margin:auto}
+.card,.section,.stat{background:var(--soft);border-radius:18px;padding:15px;margin-bottom:11px}
+.card{border:0;width:100%;text-align:right;color:inherit}.cardtop{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}.pkg{background:#fff;color:var(--gold);border-radius:18px;padding:3px 11px;font-size:12px}.date{font-size:17px;font-weight:700}.muted{font-size:13px;color:var(--mut);margin-top:5px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.tag{background:#fff;border-radius:18px;padding:4px 9px;font-size:12px}
+.btn{border:1px solid var(--gold);border-radius:25px;padding:10px 15px;color:var(--gold);background:transparent}.btn.fill{background:var(--gold);color:#fff}.btn.red{border-color:var(--red);color:var(--red)}.btn.red.fill{background:var(--red);color:#fff}
+.fab{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:0;border-radius:40px;background:var(--gold);color:#fff;padding:14px 28px;box-shadow:0 5px 18px #b8946a55;z-index:3;white-space:nowrap}
+label{display:block;color:var(--mut);font-size:13px;margin:10px 0 5px}input,textarea,select{width:100%;border:0;border-radius:12px;background:#fff;padding:12px;color:var(--fg);min-height:44px;outline-color:var(--gold)}textarea{min-height:80px;resize:vertical}.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.row3{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:7px}.section h3{margin:0 0 9px;color:var(--gold);font-size:15px}.line{display:flex;gap:7px;align-items:center;margin:7px 0}.line>*{min-width:0}.line input{flex:1}.x{border:0;background:none;color:var(--red);font-size:26px;padding:0 4px}.check{width:28px;height:28px;min-height:28px;accent-color:var(--grn)}.statline{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:5px 0}.empty{text-align:center;color:var(--mut);padding:50px 8px}.modal{position:fixed;inset:0;background:#0007;z-index:5;display:none;overflow:auto;padding:0}.modal.show{display:block}.sheet{background:var(--bg);min-height:100%;padding:calc(env(safe-area-inset-top) + 14px) 14px calc(25px + env(safe-area-inset-bottom));max-width:700px;margin:auto}.sheethead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.sheethead h2{font-size:21px;margin:0}.actions{display:flex;gap:8px;margin-top:12px}.actions .btn{flex:1}.hint{font-size:12px;color:var(--mut)}.bar{height:9px;border-radius:9px;background:var(--gold);margin-top:8px}
+</style>
+</head>
+<body>
+<header><div class="brand">NAVO STUDIO</div><h1 class="h1">برنامه‌ریزی کارها</h1>
+<div class="tabs" id="tabs">
+<button class="chip active" data-tab="list">رزروها</button><button class="chip" data-tab="stats">آمار</button><button class="chip" data-tab="gear">تجهیزات</button><button class="chip" data-tab="backup">پشتیبان</button>
+</div><div class="chips" id="filters"><button class="chip active" data-filter="all">همه</button><button class="chip" data-filter="open">در جریان</button><button class="chip" data-filter="done">تحویل شده</button></div></header>
+<main id="main"></main><button class="fab" id="newBtn">＋ رزرو جدید</button>
+<div class="modal" id="modal"><div class="sheet"><div class="sheethead"><h2 id="formTitle">رزرو جدید</h2><button class="btn" id="closeBtn">بستن ✕</button></div><form id="form">
+<div class="section"><h3>اطلاعات مراسم</h3>
+<label>نام مشتری</label><input id="name" required>
+<label>شماره تماس</label><input id="phone" type="tel">
+<label>تاریخ مراسم (شمسی)</label><div class="row3"><select id="y" required></select><select id="m" required></select><select id="d" required></select></div>
+<div class="row"><div><label>پکیج</label><select id="pkg"><option>Silver</option><option selected>Gold</option><option>Platinum</option></select></div><div><label>نوع مراسم</label><select id="type"><option>عروسی</option><option>عقد</option><option>نامزدی</option><option>آتلیه</option></select></div></div>
+<label>محل برگزاری</label><input id="place"><label>یادداشت</label><textarea id="note"></textarea><label>وضعیت رزرو</label><select id="status"><option>در انتظار</option><option selected>تأیید شده</option><option>انجام شد</option><option>لغو</option></select></div>
+<div class="section"><h3>پرداخت‌ها</h3><label>مبلغ کل (تومان)</label><input id="price" inputmode="numeric" placeholder="مثلاً ۳۵۰۰۰۰۰۰"><div id="pays"></div><button class="btn" type="button" id="addPay">＋ ثبت پرداخت</button><p id="paymentSummary"></p></div>
+<div class="section"><h3>نیروها</h3><div id="crew"></div><button class="btn" type="button" id="addCrew">＋ نیروی جدید</button></div>
+<div class="section"><h3>تجهیزات لازم</h3><div id="gears"></div><button class="btn" type="button" id="addGear">＋ تجهیزات</button><p class="hint">تیک‌خورده یعنی تهیه شده.</p></div>
+<div class="section"><h3>هارد</h3><div class="row"><button class="btn" type="button" id="hddYes">هارد آورده</button><button class="btn red" type="button" id="hddNo">نیاورده</button></div></div>
+<div class="section"><h3>تحویل پروژه</h3><label>تاریخ تحویل (شمسی)</label><div class="row3"><select id="dly"></select><select id="dlm"></select><select id="dld"></select></div><label>وضعیت پروژه</label><select id="ps"><option>شروع نشده</option><option>منتظر هارد</option><option>در حال ادیت</option><option>ارسال برای تأیید</option><option>آماده تحویل</option><option>تحویل شد</option></select></div>
+<div class="actions"><button class="btn fill" type="submit">ذخیره</button><button class="btn red" type="button" id="deleteBtn" style="display:none">حذف رزرو</button></div>
+</form></div></div>
+<script>
+const KEY='navo_planner_web_v1', months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const fa=n=>String(n??'').replace(/\\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[+d]);
+const en=s=>String(s??'').replace(/[۰-۹]/g,c=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(c)).replace(/[٬,،\\s]/g,'');
+const money=n=>fa(Math.round(+n||0).toLocaleString('en-US'))+' تومان';
+const blank=()=>({name:'',phone:'',d:0,m:0,y:0,type:'عروسی',pkg:'Gold',place:'',note:'',status:'تأیید شده',price:0,pays:[],crew:[],gear:[],hdd:false,dld:0,dlm:0,dly:0,ps:'شروع نشده'});
+let data={};try{data=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
+let tab='list',filter='all',editing=null,formData=null;
+const $=id=>document.getElementById(id);
+function persist(){localStorage.setItem(KEY,JSON.stringify(data))}
+function paid(b){return (b.pays||[]).reduce((s,p)=>s+(+p.a||0),0)}
+function rem(b){return (+b.price||0)-paid(b)}
+function date(b){return b.d&&b.m&&b.y?`${fa(b.d)} ${months[b.m-1]} ${fa(b.y)}`:'—'}
+function key(b){return (+b.y||0)*10000+(+b.m||0)*100+(+b.d||0)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fillDate(id,kind){let el=$(id);el.innerHTML='';let opts=kind==='y'?[1405,1406,1407,1408].map(v=>[v,fa(v)]):kind==='m'?months.map((v,i)=>[i+1,v]):Array.from({length:31},(_,i)=>[i+1,fa(i+1)]);el.add(new Option(kind==='y'?'سال':kind==='m'?'ماه':'روز',''));opts.forEach(([v,l])=>el.add(new Option(l,v)))}
+['y','m','d','dly','dlm','dld'].forEach(id=>fillDate(id,id==='y'||id==='dly'?'y':id==='m'||id==='dlm'?'m':'d'));
+function render(){ $('filters').style.display=tab==='list'?'flex':'none';document.querySelectorAll('#tabs [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.querySelectorAll('#filters [data-filter]').forEach(b=>b.classList.toggle('active',b.dataset.filter===filter));$('newBtn').style.display=tab==='list'?'block':'none';
+const items=Object.entries(data).map(([id,b])=>({...b,id})),live=items.filter(b=>b.status!=='لغو');let out='';
+if(tab==='list'){let rows=items.filter(b=>filter==='all'||(filter==='done'?b.ps==='تحویل شد':b.ps!=='تحویل شد'&&b.status!=='لغو')).sort((a,b)=>key(a)-key(b));out=rows.length?rows.map(b=>`<button class="card" data-edit="${esc(b.id)}"><div class="cardtop"><span class="pkg">${esc(b.pkg)}</span><div style="flex:1"><div class="date">${date(b)}</div><div>${esc(b.name)}</div></div></div><div class="muted">${esc(b.type)}${b.place?' · '+esc(b.place):''}${b.status==='لغو'?' · لغو شده':''}</div><div class="tags">${b.price?`<span class="tag" style="color:${rem(b)>0?'var(--red)':'var(--grn)'}">${rem(b)>0?'باقی‌مانده '+money(rem(b)):'تسویه شده'}</span>`:''}<span class="tag" style="color:${b.hdd?'var(--grn)':'var(--red)'}">${b.hdd?'هارد آورده':'هارد نیاورده'}</span><span class="tag">${esc(b.ps||'شروع نشده')}</span>${b.dly?`<span class="tag">تحویل: ${fa(b.dld)} ${months[b.dlm-1]} ${fa(b.dly)}</span>`:''}${(b.crew||[]).length?`<span class="tag">${fa(b.crew.length)} نیرو</span>`:''}</div></button>`).join(''):'<div class="empty">رزروی ثبت نشده است</div>'}
+if(tab==='stats'){let total=live.reduce((s,b)=>s+(+b.price||0),0),pd=live.reduce((s,b)=>s+paid(b),0);out=`<div class="stat">${[['تعداد مراسم',fa(live.length)],['مجموع قراردادها',money(total)],['دریافت‌شده',money(pd)],['باقی‌مانده',money(total-pd)]].map(([k,v])=>`<div class="statline"><span>${esc(v)}</span><span class="muted">${k}</span></div>`).join('')}</div>`+['Silver','Gold','Platinum'].map(p=>{let a=live.filter(b=>b.pkg===p),n=a.length;return `<div class="stat"><div class="statline"><span class="muted">${fa(n)} مراسم · ${money(a.reduce((s,b)=>s+(+b.price||0),0))}</span><b>${p}</b></div><div class="bar" style="width:${Math.max(2,n/Math.max(1,...['Silver','Gold','Platinum'].map(q=>live.filter(b=>b.pkg===q).length))*100)}%"></div></div>`}).join('')}
+if(tab==='gear'){let list=live.filter(b=>b.ps!=='تحویل شد'&&(b.gear||[]).some(g=>!g.ok)).sort((a,b)=>key(a)-key(b));out=list.length?list.map(b=>`<button class="card" data-edit="${esc(b.id)}"><b>${date(b)} · ${esc(b.name)}</b>${b.gear.filter(g=>!g.ok).map(g=>`<div class="muted">• ${esc(g.t)}</div>`).join('')}</button>`).join(''):'<div class="empty">تجهیزات تهیه‌نشده‌ای وجود ندارد</div>'}
+if(tab==='backup'){out=`<div class="stat"><b>پشتیبان‌گیری</b><p class="muted">اطلاعات روی همین مرورگر و همین گوشی ذخیره می‌شود. مرتب پشتیبان بگیرید.</p><button class="btn fill" id="exportBtn">ارسال / ذخیره پشتیبان</button></div><div class="stat"><b>بازیابی</b><textarea id="restore" placeholder="متن پشتیبان را اینجا بچسبانید"></textarea><button class="btn" id="importBtn">بازیابی</button><p class="muted" id="backupMsg"></p></div>`}
+$('main').innerHTML=out;
+document.querySelectorAll('[data-edit]').forEach(el=>el.onclick=()=>openForm(el.dataset.edit));
+if($('exportBtn'))$('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify(data)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='navo-backup.json';a.click();URL.revokeObjectURL(url);};
+if($('importBtn'))$('importBtn').onclick=()=>{try{let o=JSON.parse($('restore').value);if(!o||typeof o!=='object'||Array.isArray(o))throw 0;data={...data,...o};persist();render();}catch(e){$('backupMsg').textContent='متن پشتیبان معتبر نیست.'}}
+}
+document.querySelectorAll('#tabs [data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});document.querySelectorAll('#filters [data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;render()});
+function openForm(id){editing=id||null;formData=id?JSON.parse(JSON.stringify(data[id])):{...blank()};if(!formData.pays)formData.pays=[];if(!formData.crew)formData.crew=[];if(!formData.gear)formData.gear=[];$('formTitle').textContent=id?'ویرایش مراسم':'رزرو جدید';$('deleteBtn').style.display=id?'block':'none';
+['name','phone','place','note','pkg','type','status','price','ps'].forEach(k=>{let v=formData[k]??'';$(k).value=k==='price'&&v?fa(v):v});['y','m','d','dly','dlm','dld'].forEach(k=>$(k).value=formData[k]||'');drawArrays();drawHdd();$('modal').classList.add('show');window.scrollTo(0,0)}
+function drawArrays(){ $('pays').innerHTML=formData.pays.map((p,i)=>`<div class="line"><button class="x" type="button" data-rm="pays:${i}">×</button><input data-payn="${i}" placeholder="توضیح (بیعانه...)" value="${esc(p.n||'')}"><input data-paya="${i}" inputmode="numeric" placeholder="مبلغ" value="${p.a?fa(p.a):''}"></div>`).join('');$('crew').innerHTML=formData.crew.map((p,i)=>`<div class="line"><button class="x" type="button" data-rm="crew:${i}">×</button><input data-crewr="${i}" placeholder="وظیفه" value="${esc(p.r||'')}"><input data-crewn="${i}" placeholder="نام" value="${esc(p.n||'')}"></div>`).join('');$('gears').innerHTML=formData.gear.map((g,i)=>`<div class="line"><button class="x" type="button" data-rm="gear:${i}">×</button><input data-geart="${i}" placeholder="مثلاً باتری اضافه" value="${esc(g.t||'')}"><input class="check" type="checkbox" data-gearo="${i}" ${g.ok?'checked':''}></div>`).join('');document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{let [k,i]=b.dataset.rm.split(':');formData[k].splice(+i,1);drawArrays()});document.querySelectorAll('[data-payn]').forEach(e=>e.oninput=()=>formData.pays[+e.dataset.payn].n=e.value);document.querySelectorAll('[data-paya]').forEach(e=>e.oninput=()=>{formData.pays[+e.dataset.paya].a=Number(en(e.value))||0;summary()});document.querySelectorAll('[data-crewr]').forEach(e=>e.oninput=()=>formData.crew[+e.dataset.crewr].r=e.value);document.querySelectorAll('[data-crewn]').forEach(e=>e.oninput=()=>formData.crew[+e.dataset.crewn].n=e.value);document.querySelectorAll('[data-geart]').forEach(e=>e.oninput=()=>formData.gear[+e.dataset.geart].t=e.value);document.querySelectorAll('[data-gearo]').forEach(e=>e.onchange=()=>formData.gear[+e.dataset.gearo].ok=e.checked);summary()}
+function summary(){let p=formData.pays.reduce((s,p)=>s+(+p.a||0),0),r=(+formData.price||0)-p;$('paymentSummary').innerHTML=`پرداخت‌شده: ${money(p)}<br><b style="color:${r>0?'var(--red)':'var(--grn)'}">باقی‌مانده: ${money(r)}</b>`}
+function drawHdd(){$('hddYes').classList.toggle('fill',!!formData.hdd);$('hddNo').classList.toggle('fill',!formData.hdd)}
+$('addPay').onclick=()=>{formData.pays.push({a:0,n:''});drawArrays()};$('addCrew').onclick=()=>{formData.crew.push({n:'',r:''});drawArrays()};$('addGear').onclick=()=>{formData.gear.push({t:'',ok:false});drawArrays()};$('hddYes').onclick=()=>{formData.hdd=true;drawHdd()};$('hddNo').onclick=()=>{formData.hdd=false;drawHdd()};
+$('price').oninput=()=>{formData.price=Number(en($('price').value))||0;summary()};
+$('closeBtn').onclick=()=>$('modal').classList.remove('show');$('newBtn').onclick=()=>openForm(null);
+$('deleteBtn').onclick=()=>{if(editing&&confirm('این رزرو حذف شود؟')){delete data[editing];persist();$('modal').classList.remove('show');render()}};
+$('form').onsubmit=e=>{e.preventDefault();let b={...formData};['name','phone','place','note','pkg','type','status','ps'].forEach(k=>b[k]=$(k).value);['y','m','d','dly','dlm','dld'].forEach(k=>b[k]=Number($(k).value)||0);b.price=Number(en($('price').value))||0;b.pays=b.pays.filter(p=>p.a);b.crew=b.crew.filter(p=>p.n||p.r);b.gear=b.gear.filter(g=>g.t);if(!b.name.trim()||!b.d||!b.m||!b.y){alert('نام و تاریخ مراسم را کامل وارد کنید');return}let clash=Object.entries(data).some(([id,x])=>id!==editing&&x.status!=='لغو'&&key(x)===key(b));if(clash&&b.status!=='لغو'&&!confirm('برای این تاریخ مراسم دیگری هم ثبت شده. ذخیره شود؟'))return;let id=editing||'b'+Date.now().toString(36);b.created=b.created||Date.now();data[id]=b;persist();$('modal').classList.remove('show');render()};
+render();
+</script>
+</body></html>
